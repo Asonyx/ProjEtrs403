@@ -11,6 +11,10 @@ import sys
 
 ssid = 'wifirpi'
 password = '88E4VB1YQBI15TM4UCK9KP1LWQ'
+server_ip = "193.48.125.214"
+
+pin = machine.Pin(15, machine.Pin.IN, machine.Pin.PULL_UP);
+DHT22 = dht.DHT22(pin)
 
 def connect():
     #Connect to WLAN
@@ -32,6 +36,18 @@ def connect():
 
 ip = connect();
 
+def get_mesurmenents():
+    try:
+        DHT22.measure()
+        temp = DHT22.temperature()  # Gets the temperature in Celsius
+        humidity = DHT22.humidity()  # Gets the relative humidity in %
+        print("Temperature: {:.2f}°C, Humidity: {:.2f}%".format(temp, humidity))
+        return (temp, humidity)
+    except OSError as e:
+        print("Failed to read from DHT22 sensor:", e)
+    return None
+    
+
 print ('Connected - press BOOTSEL to quit')
 
 while True:
@@ -39,33 +55,16 @@ while True:
         pico_led.off()
         print('ByBye')
         sys.exit()
-    payload = "temp=20&hum=35"
-    response = requests.post('http://193.48.125.214/ETRSTPCAP/recupdonnee.php',
+    temp, hum = get_mesurmenents()
+    payload = f"temp={temp}&hum={hum}"
+    try:
+        response = requests.post(f'http://{server_ip}/ETRSTPCAP/recupdonnee.php',
                              data=payload.encode('utf-8'),
                              headers={'Content-Type': 'application/x-www-form-urlencoded'})
-    response_code = response.status_code
-    response_content = response.content
-    print('Response code: ', response_code)
-    print('Response content:', response_content)
-    sleep(2)
-
-
-"""
-DHT22_PIN = 0 # The Raspberry Pi Pico pin (GP0) connected to the DHT22 sensor
-
-# Initialize the DHT22 sensor
-pin = machine.Pin(15, machine.Pin.IN, machine.Pin.PULL_UP);
-DHT22 = dht.DHT22(pin)
-
-# Read data from the sensor every 2 seconds
-while True:
-    try:
-        DHT22.measure()
-        temp = DHT22.temperature()  # Gets the temperature in Celsius
-        humidity = DHT22.humidity()  # Gets the relative humidity in %
-        print("Temperature: {:.2f}°C, Humidity: {:.2f}%".format(temp, humidity))
+        response_code = response.status_code
+        response_content = response.content
+        print('Response code: ', response_code)
+        print('Response content:', response_content)
     except OSError as e:
-        print("Failed to read from DHT22 sensor:", e)
-
-    time.sleep(2)
-    """
+        print("Unable to communicate with server", e);
+    sleep(10)
