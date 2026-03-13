@@ -85,10 +85,11 @@ while True:
         if lastTime is None or lastTemp is None or lastHum is None\
                 or shouldSendData(lastTime, lastTemp, lastHum, temp, hum):
             success = sendMesurementToServer(temp, hum, server_ip)
-            lastTime = time.time()
-            lastTemp, lastHum = temp, hum
             if not success:
                 print("Unable to send data to server")
+            else :
+                lastTime = time.time()
+                lastTemp, lastHum = temp, hum
         # else wait
     else:
         print('Unvalid data, verify the sensor connexion, skipping sending data')

@@ -1,11 +1,13 @@
 <?php
+// Reçoit les données du capteur
 
 $temp = $_POST['temp'];
 $hum = $_POST['hum'];
 
-$date_mesure = date('Y-m-d');
-$heure = date('H');
-$minute = date('i');
+// Récupérer la date au format MySQL (YYYY-MM-DD)
+$date_mesure = date('Y-m-d');  // 2026-03-13
+$heure = date('H');              //  (0-23)
+$minute = date('i');             //  (00-59)
 
 try {
     $dbh = new PDO("mysql:dbname=tpetrs;host=localhost;charset=utf8", "root", "");
