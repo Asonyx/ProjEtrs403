@@ -34,9 +34,7 @@ def connect():
     pico_led.on()
     return ip
 
-ip = connect();
-
-def get_mesurmenents():
+def get_mesurmenents() -> tuple:
     try:
         DHT22.measure()
         temp = DHT22.temperature()  # Gets the temperature in Celsius
@@ -46,9 +44,34 @@ def get_mesurmenents():
     except OSError as e:
         print("Failed to read from DHT22 sensor:", e)
     return None
-    
 
-print ('Connected - press BOOTSEL to quit')
+def sendMesurementToServer(temp, hum, ipAdress: str) -> bool :
+    payload = f"temp={temp}&hum={hum}"
+    try:
+        response = requests.post(f'http://{server_ip}/ETRSTPCAP/recupdonnee.php',
+                        data=payload.encode('utf-8'),
+                        headers={'Content-Type': 'application/x-www-form-urlencoded'})
+        response_code = response.status_code
+        print('Response code: ', response_code)
+        return response_code == 200
+    except OSError as e:
+        print("Unable to communicate with server", e)
+    return False
+
+def shouldSendData(lastTimeSent, lastTemperature, lastHuimidity, temp, hum):
+    res = False
+    temps = time.time()
+    if (temps - lastTimeSent)>30 or abs(temp - lastTemperature)>2 or abs(hum - lastHuimidity)>10 :
+        res = True
+    return res
+    
+        
+    
+ip = connect()
+
+print (f'Connected ({ip}) - press BOOTSEL to quit')
+
+lastTime, lastTemp, lastHum = (None, None, None)
 
 while True:
     if rp2.bootsel_button() == 1:
@@ -56,15 +79,12 @@ while True:
         print('ByBye')
         sys.exit()
     temp, hum = get_mesurmenents()
-    payload = f"temp={temp}&hum={hum}"
-    try:
-        response = requests.post(f'http://{server_ip}/ETRSTPCAP/recupdonnee.php',
-                             data=payload.encode('utf-8'),
-                             headers={'Content-Type': 'application/x-www-form-urlencoded'})
-        response_code = response.status_code
-        response_content = response.content
-        print('Response code: ', response_code)
-        print('Response content:', response_content)
-    except OSError as e:
-        print("Unable to communicate with server", e);
-    sleep(10)
+    if lastTime is None or lastTemp is None or lastHum is None\
+            or shouldSendData(lastTime, lastTemp, lastHum, temp, hum):
+        success = sendMesurementToServer(temp, hum, server_ip)
+        lastTime = time.time()
+        lastTemp, lastHum = temp, hum
+        if not success:
+            print("Unable to send data to server")
+        
+    sleep(5)
