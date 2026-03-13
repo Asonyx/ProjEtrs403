@@ -13,7 +13,7 @@ ssid = 'wifirpi'
 password = '88E4VB1YQBI15TM4UCK9KP1LWQ'
 server_ip = "193.48.125.214"
 
-pin = machine.Pin(15, machine.Pin.IN, machine.Pin.PULL_UP);
+pin = machine.Pin(15, machine.Pin.IN, machine.Pin.PULL_UP)
 DHT22 = dht.DHT22(pin)
 
 def connect():
@@ -78,13 +78,19 @@ while True:
         pico_led.off()
         print('ByBye')
         sys.exit()
-    temp, hum = get_mesurmenents()
-    if lastTime is None or lastTemp is None or lastHum is None\
-            or shouldSendData(lastTime, lastTemp, lastHum, temp, hum):
-        success = sendMesurementToServer(temp, hum, server_ip)
-        lastTime = time.time()
-        lastTemp, lastHum = temp, hum
-        if not success:
-            print("Unable to send data to server")
+    mesurements = get_mesurmenents()
+    if mesurements is not None:
+        temp, hum = get_mesurmenents()
+
+        if lastTime is None or lastTemp is None or lastHum is None\
+                or shouldSendData(lastTime, lastTemp, lastHum, temp, hum):
+            success = sendMesurementToServer(temp, hum, server_ip)
+            lastTime = time.time()
+            lastTemp, lastHum = temp, hum
+            if not success:
+                print("Unable to send data to server")
+        # else wait
+    else:
+        print('Unvalid data, verify the sensor connexion, skipping sending data')
         
     sleep(5)
