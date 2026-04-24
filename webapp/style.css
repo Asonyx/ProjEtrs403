@@ -1,0 +1,135 @@
+/* ===== RESET & BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #f4f7fc;
+    text-align: center;
+    padding: 40px 20px;
+    color: #1a2a3a;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+/* ===== TYPOGRAPHIE ===== */
+h2 {
+    color: #1e3a5f;
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
+    border-left: 4px solid #3498db;
+    padding-left: 16px;
+    text-align: left;
+}
+
+p {
+    color: #2c3e4e;
+    line-height: 1.5;
+    margin: 12px 0;
+}
+
+/* ===== BOUTONS ===== */
+.btn {
+    display: inline-block;
+    padding: 10px 26px;
+    margin: 8px 6px;
+    background: #ecf5fc;
+    color: #1f6392;
+    text-decoration: none;
+    border-radius: 40px;
+    border: 1px solid #cde4f5;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.25s;
+}
+
+.btn:hover {
+    background: #dcebf5;
+    transform: translateY(-1px);
+}
+
+/* ===== GRAPHIQUES ===== */
+.graphiques-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 40px 0;
+    justify-content: center;
+}
+
+.graphique-card {
+    flex: 1;
+    min-width: 320px;
+    background: white;
+    border-radius: 28px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05);
+}
+
+.graphique-card h2 {
+    text-align: center;
+    border-left: none;
+    margin-bottom: 1rem;
+}
+
+.graphique-card canvas {
+    max-width: 100%;
+    border-radius: 20px;
+}
+
+/* ===== TABLEAU ===== */
+.table-historique {
+    width: 100%;
+    margin: 30px 0;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    border-collapse: collapse;
+}
+
+.table-historique th,
+.table-historique td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #f0f3f8;
+}
+
+.table-historique th {
+    background: #f8fafd;
+    color: #1e4663;
+    font-weight: 600;
+}
+
+.table-historique tbody tr:hover {
+    background: #fafcff;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .graphiques-container {
+        flex-direction: column;
+    }
+    
+    .container {
+        padding: 20px;
+    }
+    
+    .btn {
+        padding: 8px 18px;
+    }
+    
+    .table-historique th,
+    .table-historique td {
+        padding: 10px 6px;
+        font-size: 0.85rem;
+    }
+}

@@ -1,0 +1,95 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 50px;
+    margin: 0;
+}
+
+.container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-success {
+    background-color: #27ae60;
+}
+
+.btn-success:hover {
+    background-color: #229954;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h2[style*="color: green"] {
+    color: #27ae60 !important;
+}
+
+p {
+    color: #555;
+    line-height: 1.6;
+    margin: 15px 0;
+}
+
+p[style*="font-size: 24px"] {
+    font-size: 24px !important;
+    font-weight: bold;
+    color: #e74c3c !important;
+    margin: 10px 0;
+}
+
+p[style*="font-size: 20px"] {
+    font-size: 20px !important;
+    font-weight: bold;
+    color: #3498db !important;
+    margin: 10px 0;
+}
+
+/* Message d'erreur */
+p[style*="color: red"] {
+    background-color: #fde8e8;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid #e74c3c;
+}
+
+/* Message de succès */
+h2[style*="color: green"] {
+    background-color: #e8f5e8;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 1.2em;
+}
